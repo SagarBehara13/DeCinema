@@ -2,7 +2,48 @@ import React, { Component } from 'react';
 import logo from '../logo.png';
 import './App.css';
 
+const ifsClient = require('ipfs-http-client')
+//const ipfs = ifsClient('ipfs.infura.io', 5001, {protocol: 'https'})
+const ipfs = ifsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'http' })
+
 class App extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      buffer: null
+    }
+  }
+  
+  captureFile = (event) => {
+    event.preventDefault()
+    const file = event.target.files[0];
+    const reader = new window.FileReader();
+    reader.readAsArrayBuffer(file);
+    reader.onloadend = () => {
+      this.setState({ buffer: Buffer(reader.result)})
+    }
+    console.log('file captured..');
+  }
+
+  onSubmit = async (event) => {
+    try {
+      event.preventDefault()
+      console.log('Submitting the form', this.state.buffer);
+      
+      ipfs.add(this.state.buffer)
+				.then(function (result) {			
+          console.log('IPFS', result)
+				})
+				.catch(function(err) {
+					console.log('Fail: ', err)
+			})
+
+    } catch (e) {
+      console.log(e)
+    }
+    
+  }
+
   render() {
     return (
       <div>
@@ -27,18 +68,10 @@ class App extends Component {
                 >
                   <img src={logo} className="App-logo" alt="logo" />
                 </a>
-                <h1>Dapp University Starter Kit</h1>
-                <p>
-                  Edit <code>src/components/App.js</code> and save to reload.
-                </p>
-                <a
-                  className="App-link"
-                  href="http://www.dappuniversity.com/bootcamp"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  LEARN BLOCKCHAIN <u><b>NOW! </b></u>
-                </a>
+                <form onSubmit={this.onSubmit}>
+                  <input type="file" onChange={this.captureFile}></input>
+                  <input type="submit"></input>
+                </form>
               </div>
             </main>
           </div>
