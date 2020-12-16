@@ -13,6 +13,7 @@ const base_url = "https://image.tmdb.org/t/p/original/"
 function Row({ title, fetchUrl, isLargeRow }) {
   const [movies, setMovies] = useState([])
   const [trailerUrl, setTrailerUrl] = useState("")
+
   useEffect(() => {
     async function fetchData() {
       const request = await axios.get(fetchUrl)
@@ -20,6 +21,7 @@ function Row({ title, fetchUrl, isLargeRow }) {
     }
     fetchData()
   }, [fetchUrl])
+
   const youtubeOpts = {
     height: "390",
     width: "100%",
@@ -27,6 +29,7 @@ function Row({ title, fetchUrl, isLargeRow }) {
       autoplay: 1,
     },
   }
+
   const movieClicked = (moviename) => {
     console.log(moviename)
     if (trailerUrl !== "") setTrailerUrl("")
@@ -39,11 +42,12 @@ function Row({ title, fetchUrl, isLargeRow }) {
         .catch((err) => console.log(err))
     }
   }
+
   return (
     <div className="row">
       <h2>{title}</h2>
+
       <ScrollContainer className="row__posters">
-        {/* <div className="row__posters"> */}
         {movies.map((movie) => (
           <img
             onClick={() =>
@@ -56,8 +60,8 @@ function Row({ title, fetchUrl, isLargeRow }) {
             alt={movie.name}
           />
         ))}
-        {/* </div> */}
       </ScrollContainer>
+
       {trailerUrl !== "" && <YouTube videoId={trailerUrl} opts={youtubeOpts} />}
     </div>
   )

@@ -1,8 +1,13 @@
+import Web3 from 'web3'
 import React, { Component } from "react"
-import { Breadcrumb, BreadcrumbItem, Button, Form, FormGroup, Label, Input, Col, FormFeedback } from 'reactstrap'
-import { Link } from 'react-router-dom'
+import { Button, Form, FormGroup, Label, Input, Col, FormFeedback, Spinner } from 'reactstrap'
 
 import "./Nav.css"
+import "./AddRequest.css"
+
+
+const ifsClient = require('ipfs-http-client')
+const ipfs = ifsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'http' })
 
 
 class AddRequest extends Component {
@@ -10,65 +15,174 @@ class AddRequest extends Component {
     super(props)
 
     this.state = {
-      firstname: '',
-      lastname: '',
-      telnum: '',
-      email: '',
-      agree: false,
-      contactType: 'Tel.',
-      message: '',
+      loading: false,
+      loadingMessage: '',
+      filmname: '',
+      directorname: '',
+      budget: '',
+      interestrate: '',
+      description: '',
+      category: '',
+      poster: null,
+      script: null,
+      posterBuffer: null,
+      scriptBuffer: null,
+      posterHash: null,
+      scriptHash: null,
       touched: {
-        firstname: false,
-        lastname: false,
-        telnum: false,
-        email: false
+        filmname: false,
+        directorname: false,
+        interestrate: false,
+        description: false,
+        category: false,
+        budget: false,
+        poster: false,
+        script: false,
       }
     }
 
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleBlur = this.handleBlur.bind(this);
+    this.validate = this.validate.bind(this);
+
+    this.loadWeb3 = this.loadWeb3.bind(this)
+    // this.createProduct = this.createProduct.bind(this)
+    // this.submitForm = this.submitForm.bind(this)
+    // this.uplaodFile = this.uploadFile.bind(this)
+    // this.onFileChange = this.onFileChange.bind(this)
   }
+
+  async componentWillMount() {
+    // await this.loadWeb3()
+    // await this.loadBlockchainData()
+  }
+
+  async loadWeb3() {
+    if (window.ethereum) {
+      window.web3 = new Web3(window.ethereum)
+      await window.ethereum.enable()
+    }
+    else if (window.web3) {
+      window.web3 = new Web3(window.web3.currentProvider)
+    }
+    else {
+      window.alert('Non-Ethereum browser detected. You should consider trying MetaMask!')
+    }
+  }
+
+  // async loadBlockchainData() {
+  //   const web3 = window.web3
+  //   const accounts = await web3.eth.getAccounts()
+  //   this.setState({ account: accounts[0] })
+
+  //   const networkId = await web3.eth.net.getId()
+  //   const networkData = Auction.networks[networkId]
+
+  //   if (networkData) {
+  //     const auction = new web3.eth.Contract(Auction.abi, networkData.address)
+  //     this.setState({ auction })
+
+  //     const productCount = await auction.methods.productsCount().call()
+
+  //     this.setState({ productCount })
+
+  //     for (var i = 1; i <= productCount; i++) {
+  //       const product = await auction.methods.products(i).call()
+
+  //       this.setState({
+  //         products: [...this.state.products, product]
+  //       })
+  //     }
+
+  //     this.setState({ loading: false })
+
+  //   } else {
+  //     window.alert("Auction contract is not deployed to detected network")
+  //   }
+  // }
 
   handleInputChange(event) {
-    const target = event.target;
-    const value = target.type === 'checkbox' ? target.checked : target.value.trim();
-    const name = target.name;
+    const target = event.target
+    const name = target.name
+    let value = null
 
-    this.setState({
-      [name]: value
-    });
+    if (target.type === 'file') {
+      value = target.files[0];
+
+      const reader = new window.FileReader();
+      reader.readAsArrayBuffer(value);
+
+      reader.onloadend = () => {
+        this.setState({ [`${name}Buffer`]: Buffer(reader.result), [name]: true })
+      }
+
+    } else {
+      value = target.value
+
+      this.setState({
+        [name]: value
+      });
+    }
   }
 
-  handleSubmit(event) {
-    console.log('Current State is: ' + JSON.stringify(this.state));
-    alert('Current State is: ' + JSON.stringify(this.state));
+  async handleSubmit(event) {
     event.preventDefault();
-  }
 
-  validate(firstname, lastname, telnum, email) {
-    const errors = {
-      firstname: '',
-      lastname: '',
-      telnum: '',
-      email: ''
+    const errors = this.validate(this.state.filmname, this.state.directorname, this.state.interestrate, this.state.budget, this.state.category, this.state.poster, this.state.script, this.state.description)
+
+    if (errors.filmname !== '' && errors.directorname !== '' && errors.interestrate !== '' && errors.description !== ''
+      && errors.category !== '' && errors.budget !== '' && !this.state.posterBuffer && !this.state.scriptBuffer) {
+      return
     }
 
-    if (this.state.touched.firstname && firstname.length < 3)
-      errors.firstname = 'First name should be >= 3 characters'
-    else if (this.state.touched.firstname && firstname.length > 10)
-      errors.firstname = 'First name should be <= 10 characters'
+    this.setState({ loading: true, loadingMessage: 'Saving scripts and poster to IPFS' })
 
-    if (this.state.touched.lastname && lastname.length < 3)
-      errors.lastname = 'Last name should be >= 3 characters'
-    else if (this.state.touched.lastname && lastname.length > 10)
-      errors.lastname = 'Last name should be <= 10 characters'
+    const posterIpfs = await ipfs.add(this.state.posterBuffer)
+    const scriptIpfs = await ipfs.add(this.state.scriptBuffer)
 
-    if (this.state.touched.telnum && !/^\d+$/.test(telnum))
-      errors.telnum = 'Tel. num should be exactly 10 numbers'
+    console.log(posterIpfs, scriptIpfs)
 
-    if (this.state.touched.email && email.split('').filter(e => e === '@').length !== 1)
-      errors.email = 'Email should contain @'
+    this.setState({ loading: false, loadingMessage: '' })
+  }
+
+  validate(filmname, directorname, interestrate, budget, category, poster, script, description) {
+    const errors = {
+      filmname: '',
+      directorname: '',
+      interestrate: '',
+      description: '',
+      category: '',
+      budget: '',
+    }
+
+    if (this.state.touched.filmname && filmname.length < 3)
+      errors.filmname = 'Filmname name should be >= 3 characters'
+    else if (this.state.touched.filmname && filmname.length > 20)
+      errors.firstname = 'Filmname name should be <= 10 characters'
+
+    if (this.state.touched.directorname && directorname.length < 3)
+      errors.directorname = 'Director name should be >= 3 characters'
+    else if (this.state.touched.directorname && directorname.length > 10)
+      errors.lastname = 'Director name should be <= 10 characters'
+
+    if (this.state.touched.interestrate && (interestrate === null || interestrate === undefined))
+      errors.interestrate = 'Rate should be entered even if 0'
+
+    if (this.state.touched.budget && (budget === null || budget === undefined))
+      errors.budget = 'Budget should be greater than 0'
+
+    if (this.state.touched.category && category.length === 0)
+      errors.category = 'Category should not be empty'
+
+    if (this.state.touched.description && description.length === 0)
+      errors.description = 'Description should not be empty'
+
+    if (this.state.touched.script && !script)
+      errors.script = 'Script file has to be uploaded'
+
+    if (this.state.touched.poster && !poster)
+      errors.poster = 'Poster file has to be uploaded'
 
     return errors
   }
@@ -83,146 +197,135 @@ class AddRequest extends Component {
   }
 
   render() {
-    const errors = this.validate(this.state.firstname, this.state.lastname, this.state.telnum, this.state.email)
-
+    if (this.state.loading) {
+      return (
+        <center style={{ padding: '100px' }}>
+          <Spinner animation="border" size="lg" role="status">
+            <span className="sr-only">
+              Loading! {this.state.loadingMessage}
+            </span>
+          </Spinner>
+        </center>
+      )
+    }
+    const errors = this.validate(this.state.filmname, this.state.directorname, this.state.interestrate, this.state.budget, this.state.category, this.state.poster, this.state.script, this.state.description)
 
     return (
-      <div className="container">
+      <div className="container-fluid">
         <div className="row">
-          <Breadcrumb>
-            <BreadcrumbItem>
-              <Link to="/home"> Home</Link>
-            </BreadcrumbItem>
-            <BreadcrumbItem active> Contact us</BreadcrumbItem>
-          </Breadcrumb>
-          <div className="col-12">
-            <h3>Contact us</h3>
-            <hr />
-          </div>
-        </div>
-        <div className="row row-content">
-          <div className="col-12">
-            <h3>Location Information</h3>
-          </div>
-          <div className="col-12 col-sm-4 offset-sm-1">
-            <h5>Our Address</h5>
-            <address>
-              121, Clear Water Bay Road<br />
-                        Clear Water Bay, Kowloon<br />
-                        HONG KONG<br />
-              <i className="fa fa-phone"></i>: +852 1234 5678<br />
-              <i className="fa fa-fax"></i>: +852 8765 4321<br />
-              <i className="fa fa-envelope"></i>: <a href="mailto:confusion@food.net">confusion@food.net</a>
-            </address>
-          </div>
-          <div className="col-12 col-sm-6 offset-sm-1">
-            <h5>Map of our Location</h5>
-          </div>
-          <div className="col-12 col-sm-11 offset-sm-1">
-            <div className="btn-group" role="group">
-              <a role="button" className="btn btn-primary" href="tel:+85212345678"><i className="fa fa-phone"></i> Call</a>
-              <a role="button" className="btn btn-info"><i className="fa fa-skype"></i> Skype</a>
-              <a role="button" className="btn btn-success" href="mailto:confusion@food.net"><i className="fa fa-envelope-o"></i> Email</a>
-            </div>
-          </div>
-        </div>
-        <div className="row row-content">
-          <div className="col-12">
-            <h3>Send us your Feedback</h3>
-          </div>
-          <div className="col-12 col-md-9">
-            <Form onSubmit={this.handleSubmit}>
-              <FormGroup row>
-                <Label htmlFor="firstname" md={2}>First Name</Label>
-                <Col md={10}>
-                  <Input type="text" id="firstname" name="firstname"
-                    placeholder="First Name"
-                    value={this.state.firstname}
-                    valid={errors.firstname === ''}
-                    invalid={errors.firstname !== ''}
-                    onBlur={this.handleBlur('firstname')}
-                    onChange={this.handleInputChange} />
-                  <FormFeedback>{errors.firstname}</FormFeedback>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor="lastname" md={2}>Last Name</Label>
-                <Col md={10}>
-                  <Input type="text" id="lastname" name="lastname"
-                    placeholder="Last Name"
-                    value={this.state.lastname}
-                    valid={errors.lastname === ''}
-                    invalid={errors.lastname !== ''}
-                    onBlur={this.handleBlur('lastname')}
-                    onChange={this.handleInputChange} />
-                  <FormFeedback>{errors.lastname}</FormFeedback>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor="telnum" md={2}>Contact Tel.</Label>
-                <Col md={10}>
-                  <Input type="tel" id="telnum" name="telnum"
-                    placeholder="Tel. number"
-                    value={this.state.telnum}
-                    valid={errors.telnum === ''}
-                    invalid={errors.telnum !== ''}
-                    onBlur={this.handleBlur('telnum')}
-                    onChange={this.handleInputChange} />
-                  <FormFeedback>{errors.telnum}</FormFeedback>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor="email" md={2}>Email</Label>
-                <Col md={10}>
-                  <Input type="email" id="email" name="email"
-                    placeholder="Email"
-                    value={this.state.email}
-                    valid={errors.email === ''}
-                    invalid={errors.email !== ''}
-                    onBlur={this.handleBlur('email')}
-                    onChange={this.handleInputChange} />
-                  <FormFeedback>{errors.email}</FormFeedback>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md={{ size: 6, offset: 2 }}>
-                  <FormGroup check>
-                    <Label check>
-                      <Input type="checkbox"
-                        name="agree"
-                        checked={this.state.agree}
-                        onChange={this.handleInputChange} /> {' '}
-                      <strong>May we contact you?</strong>
-                    </Label>
-                  </FormGroup>
-                </Col>
-                <Col md={{ size: 3, offset: 1 }}>
-                  <Input type="select" name="contactType"
-                    value={this.state.contactType}
-                    onChange={this.handleInputChange}>
-                    <option>Tel.</option>
-                    <option>Email</option>
-                  </Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Label htmlFor="message" md={2}>Your Feedback</Label>
-                <Col md={10}>
-                  <Input type="textarea" id="message" name="message"
-                    rows="12"
-                    value={this.state.message}
-                    onChange={this.handleInputChange}></Input>
-                </Col>
-              </FormGroup>
-              <FormGroup row>
-                <Col md={{ size: 10, offset: 2 }}>
-                  <Button type="submit" color="primary">
-                    Send Feedback
-                                    </Button>
-                </Col>
-              </FormGroup>
-            </Form>
-          </div>
+          <Form onSubmit={this.handleSubmit} className="addform-container col-12 col-md-9">
+            <h2>Request funds</h2>
+            <FormGroup row>
+              <Label htmlFor="filmname" md={2}>Filmname</Label>
+              <Col md={10}>
+                <Input className='input' type="text" id="filmname" name="filmname"
+                  placeholder="Filmname"
+                  value={this.state.filmname}
+                  valid={errors.filmname === ''}
+                  invalid={errors.filmname !== ''}
+                  onBlur={this.handleBlur('filmname')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.filmname}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="budget" md={2}>Film budget</Label>
+              <Col md={10}>
+                <Input className='input' type="number" id="budget" name="budget"
+                  placeholder="Film budget"
+                  value={this.state.budget}
+                  valid={errors.budget === ''}
+                  invalid={errors.budget !== ''}
+                  onBlur={this.handleBlur('budget')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.budget}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="directorname" md={2}>Director name</Label>
+              <Col md={10}>
+                <Input className='input' type="text" id="directorname" name="directorname"
+                  placeholder="Director name"
+                  value={this.state.directorname}
+                  valid={errors.directorname === ''}
+                  invalid={errors.directorname !== ''}
+                  onBlur={this.handleBlur('directorname')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.directorname}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="poster" md={2}>Poster file</Label>
+              <Col md={10}>
+                <Input
+                  type="file" id="poster" name="poster"
+                  placeholder="Upload poster"
+                  valid={errors.poster === ''}
+                  invalid={errors.poster !== ''}
+                  onBlur={this.handleBlur('poster')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.poster}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="script" md={2}>Script file</Label>
+              <Col md={10}>
+                <Input type="file" id="script" name="script"
+                  placeholder="Upload script"
+                  valid={errors.script === ''}
+                  invalid={errors.poster !== ''}
+                  onBlur={this.handleBlur('script')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.script}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="description" md={2}>Short description</Label>
+              <Col md={10}>
+                <Input className='input' type="textarea" id="description" name="description"
+                  rows="6"
+                  value={this.state.description}
+                  valid={errors.description === ''}
+                  invalid={errors.description !== ''}
+                  onBlur={this.handleBlur('description')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.description}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="interestrate" md={2}>Fixed interest percent</Label>
+              <Col md={10}>
+                <Input className='input' type="number" id="interestrate" name="interestrate"
+                  placeholder="Fixed interest percent"
+                  value={this.state.interestrate}
+                  valid={errors.interestrate === ''}
+                  invalid={errors.interestrate !== ''}
+                  onBlur={this.handleBlur('interestrate')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.interestrate}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Label htmlFor="directorname" md={2}>Category</Label>
+              <Col md={10}>
+                <Input className='input' type="text" id="category" name="category"
+                  placeholder="Film category"
+                  value={this.state.category}
+                  valid={errors.category === ''}
+                  invalid={errors.category !== ''}
+                  onBlur={this.handleBlur('category')}
+                  onChange={this.handleInputChange} />
+                <FormFeedback>{errors.category}</FormFeedback>
+              </Col>
+            </FormGroup>
+            <FormGroup row>
+              <Col md={{ size: 10, offset: 2 }}>
+                <Button type="submit" color="danger">
+                  Create request
+                </Button>
+              </Col>
+            </FormGroup>
+          </Form>
         </div>
       </div>
     );

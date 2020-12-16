@@ -10,6 +10,7 @@ const base_url = "https://image.tmdb.org/t/p/original/"
 
 function Banner() {
   const [movie, setMovie] = useState({})
+
   useEffect(() => {
     async function fetchMovie() {
       const request = await axios.get(requests.fetchNetflixOriginals)
@@ -17,7 +18,7 @@ function Banner() {
         request.data.results[
         Math.floor(Math.random() * request.data.results.length)
         ]
-      ) // using prettier
+      )
     }
     fetchMovie()
   }, [])
@@ -41,7 +42,6 @@ function Banner() {
         </div>
         <p className="banner__description">{movie ? movie.overview : null}</p>
       </div>
-      <div className="banner--fadeBottom" />
     </header>
   )
 }
