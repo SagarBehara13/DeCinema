@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import tokenLogo from '../token-logo.png'
+
 import ethLogo from '../eth-logo.png'
+import tokenLogo from '../token-logo.png'
+
 
 class SellForm extends Component {
   constructor(props) {
@@ -75,5 +77,6 @@ class SellForm extends Component {
     );
   }
 }
+
 
 export default SellForm;

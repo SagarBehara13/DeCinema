@@ -3,6 +3,8 @@
   justify-content: left;
   vertical-align: middle;
   align-items: center;
+  padding-bottom: 0;
+  margin-bottom: 0;
 }
 
 .nav__contents a {
@@ -10,7 +12,7 @@
 }
 
 .nav__contents img {
-  margin-right: 3vw;
+  margin-right: auto;
 }
 
 .nav__logo{
@@ -34,6 +36,17 @@ nav{
   transition: all .5s;
 }
 
-.nav__black{
-  color:black;
+.nav__button {
+  cursor: pointer;
+  color:  #fff;
+  outline: none;
+  border: none;
+  font-weight: 700;
+  margin-right: 1rem;
+  padding: .5rem 2rem;
+  border-radius: 0.75rem;
+}
+
+.nav__button:hover{
+  color: red;
 }

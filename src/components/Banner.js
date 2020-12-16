@@ -27,9 +27,10 @@ function Banner() {
     <header
       className="banner"
       style={{
-        backgroundSize: "cover",
+        backgroundSize: "contain",
         backgroundImage: movie ? `url('${base_url}${movie.backdrop_path}')` : null, //optional chaining: no need to check if movie is undefined '?' saw this neat trick on stackoverflow
         backgroundPosition: "center center",
+        backgroundRepear: 'no-repeat'
       }}
     >
       <div className="banner__contents">

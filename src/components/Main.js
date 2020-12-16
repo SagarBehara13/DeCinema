@@ -14,6 +14,7 @@ class Main extends React.Component {
     return (
       <div className="app">
         <Nav />
+        <br />
         <Banner />
         <BrowserRouter>
           <Switch>

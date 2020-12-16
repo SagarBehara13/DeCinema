@@ -151,7 +151,7 @@ class Contribute extends Component {
           <Form onSubmit={this.handleSubmit} className="addform-container col-12 col-md-9">
             <h2>Contribute to a request</h2>
             <FormGroup row>
-              <Label htmlFor="filmId" md={2}>Film budget</Label>
+              <Label htmlFor="filmId" md={2}>Film id</Label>
               <Col md={10}>
                 <Input className='input' type="number" id="filmId" name="filmId"
                   placeholder="Film id"
@@ -164,7 +164,7 @@ class Contribute extends Component {
               </Col>
             </FormGroup>
             <FormGroup row>
-              <Label htmlFor="amount" md={2}>Fixed interest percent</Label>
+              <Label htmlFor="amount" md={2}>Amount</Label>
               <Col md={10}>
                 <Input className='input' type="number" id="amount" name="amount"
                   placeholder="Amount to contribute"
