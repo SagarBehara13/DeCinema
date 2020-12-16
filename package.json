@@ -5,6 +5,7 @@
   "author": "gregory@dappuniversity.com",
   "dependencies": {
     "axios": "^0.21.0",
+    "@truffle/hdwallet-provider": "^1.2.0",
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
     "babel-preset-es2015": "6.24.1",
@@ -18,6 +19,10 @@
     "chai-bignumber": "3.0.0",
     "font-awesome": "^4.7.0",
     "movie-trailer": "^2.0.6",
+    "identicon": "^3.0.1",
+    "identicon.js": "^2.3.3",
+    "ipfs-api": "^26.1.2",
+    "ipfs-http-client": "^48.1.2",
     "react": "16.8.4",
     "react-bootstrap": "1.0.0-beta.5",
     "react-dom": "16.8.4",
