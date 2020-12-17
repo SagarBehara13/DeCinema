@@ -27,12 +27,12 @@ contract Token is FilmFactory {
       address indexed _spender,
       uint256 _value
     );
-    constructor (uint256 _initialSupply) public {
+    constructor (uint256 _initialSupply, uint256 _initialBalance) public {
         symbol = 'DCN';
         name = 'DeCinema Token';
-        // tokenOwner = msg.sender;
-        // balanceOf[tokenOwner] = _initialBalance;
-        totalSupply = _initialSupply;
+        tokenOwner = msg.sender;
+        balanceOf[tokenOwner] = _initialBalance;
+        totalSupply = _initialSupply - _initialBalance;
     }
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;

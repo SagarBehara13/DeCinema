@@ -1,70 +1,33 @@
-import React, { useState, useEffect } from "react"
+import React, { Component } from "react"
 import ScrollContainer from "react-indiana-drag-scroll"
 
 import "./Row.css"
-import axios from "./axios"
-import YouTube from "react-youtube"
-import movieTrailer from "movie-trailer"
 
 
-const base_url = "https://image.tmdb.org/t/p/original/"
-
-
-function Row({ title, fetchUrl, isLargeRow }) {
-  const [movies, setMovies] = useState([])
-  const [trailerUrl, setTrailerUrl] = useState("")
-
-  useEffect(() => {
-    async function fetchData() {
-      const request = await axios.get(fetchUrl)
-      setMovies(request.data.results)
-    }
-    fetchData()
-  }, [fetchUrl])
-
-  const youtubeOpts = {
-    height: "390",
-    width: "100%",
-    playerVars: {
-      autoplay: 1,
-    },
+class Row extends Component {
+  render() {
+    return (
+      <div className="row">
+        <h2>{this.props.title}</h2>
+        <br />
+        <br />
+        <br />
+        <ScrollContainer className="row__posters">
+          {this.props.data.map((filmDetail, index) => (
+            < img
+              // onClick={() =>
+              //   movieClicked(movie.name || movie.title || movie.orginal_name)
+              // }
+              key={index}
+              className={`row__poster ${this.props.isLargeRow && "row__posterLarge"}`}
+              src={`https://ipfs.infura.io/ipfs/${filmDetail.poster}`}
+              alt={'Request'}
+            />
+          ))}
+        </ScrollContainer>
+      </div>
+    )
   }
-
-  const movieClicked = (moviename) => {
-    console.log(moviename)
-    if (trailerUrl !== "") setTrailerUrl("")
-    else {
-      movieTrailer(moviename)
-        .then((url) => {
-          const urlParamV = new URLSearchParams(new URL(url).search)
-          setTrailerUrl(urlParamV.get("v"))
-        })
-        .catch((err) => console.log(err))
-    }
-  }
-
-  return (
-    <div className="row">
-      <h2>{title}</h2>
-
-      <ScrollContainer className="row__posters">
-        {movies.map((movie) => (
-          <img
-            onClick={() =>
-              movieClicked(movie.name || movie.title || movie.orginal_name)
-            }
-            key={movie.id}
-            className={`row__poster ${isLargeRow && "row__posterLarge"}`} //use && if theres no else or : otherwise use ?
-            src={`${base_url}${isLargeRow ? movie.poster_path : movie.backdrop_path
-              }`}
-            alt={movie.name}
-          />
-        ))}
-      </ScrollContainer>
-
-      {trailerUrl !== "" && <YouTube videoId={trailerUrl} opts={youtubeOpts} />}
-    </div>
-  )
 }
 
 

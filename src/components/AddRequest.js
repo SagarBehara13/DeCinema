@@ -131,12 +131,14 @@ class AddRequest extends Component {
     const posterIpfs = await ipfs.add(this.state.posterBuffer)
     const scriptIpfs = await ipfs.add(this.state.scriptBuffer)
 
+    console.log(posterIpfs, scriptIpfs)
+
     this.state.film.methods.createFilm(
       this.state.filmname.trim(),
       Number(this.state.budget),
       this.state.directorname.trim(),
-      posterIpfs,
-      scriptIpfs,
+      posterIpfs.path,
+      scriptIpfs.path,
       this.state.description,
       Number(this.state.interestrate),
       this.state.category
