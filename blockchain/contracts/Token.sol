@@ -7,6 +7,8 @@ contract Token is FilmFactory {
     string  public symbol;
     uint256 public totalSupply = 0;
     address private tokenOwner;
+    uint8   public decimals = 18;
+
     mapping(address => uint256) public balanceOf;
     mapping(address => mapping(address => uint256)) public allowance;
     event Transfer(
@@ -19,18 +21,19 @@ contract Token is FilmFactory {
       address indexed _spender,
       uint256 _value
     );
-    constructor (uint256 _initialSupply, uint256 _initialBalance) public {
+    constructor () public {
         symbol = 'DCN';
         name = 'DeCinema Token';
-        tokenOwner = msg.sender;
-        balanceOf[tokenOwner] = _initialBalance;
-        totalSupply = _initialSupply - _initialBalance;
+        totalSupply = 1000000000000000000000000;
+        balanceOf[msg.sender] = totalSupply;
     }
+
     function approve(address _spender, uint256 _value) public returns (bool success) {
         allowance[msg.sender][_spender] = _value;
         emit Approval(msg.sender, _spender, _value);
         return true;
     }
+
     function transfer(address _to, uint256 _value) public returns (bool success) {
         require(balanceOf[msg.sender] >= _value);
         balanceOf[msg.sender] -= _value;

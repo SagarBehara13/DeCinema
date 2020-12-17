@@ -4,7 +4,7 @@ const BnbSwap = artifacts.require("BnbSwap");
 
 module.exports = async function (deployer) {
   // Deploy Token
-  await deployer.deploy(Token, '10000000', '100000');
+  await deployer.deploy(Token);
   const token = await Token.deployed()
 
   // Deploy EthSwap
@@ -12,5 +12,5 @@ module.exports = async function (deployer) {
   const bnbSwap = await BnbSwap.deployed()
 
   // Transfer all tokens to EthSwap
-  await token.transfer(bnbSwap.address, '10000')
+  await token.transfer(bnbSwap.address, '1000000000000000000000000')
 };

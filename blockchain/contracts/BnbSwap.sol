@@ -5,7 +5,7 @@ import "./Token.sol";
 contract BnbSwap {
   string public name = "BnbSwap Instant Exchange";
   Token public token;
-  uint public rate = 30;
+  uint public rate = 100;
 
   event TokensPurchased(
     address account,
