@@ -37,6 +37,20 @@ These video does explains the basic flow working of the project.
 working prototype video :- https://youtu.be/5rf1E4sW-cM
 These video does showcase the overall working of the project step by step.
 ```
+
+### Daap's Glimpse
+<h2 align="center"> Example Interface </h2>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.03.50%20AM.png"><br></br>
+
+<h2 align="center"> Film's fund raising form </h2>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.04.05%20AM.png"><br></br>
+
+<h2 align="center"> Swap BNB to DCN </h2>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.04.48%20AM.png"><br></br>
+
+<h2 align="center"> Retriving the data stored on blockchain and ipfs </h2>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.05.29%20AM.png"><br></br>
+
 ### BSC Contract Address
 ```
 Token:- 0x918da5e5822490055D208CAf249f593AF6D18148
