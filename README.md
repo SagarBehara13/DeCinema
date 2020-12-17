@@ -4,7 +4,7 @@ DeCinema stands for decentralized cinema, It’s an blockchain baised dapp that 
 
 ### Basic Work Flow
 * Director/Filmmaker requests for funds for production in DCN token(Decinema token).
-* Decinema has a small dex like feature that swaps BNB into DCN and vice-versa.
+* Decinema has a small dex like feature that swaps BNB to DCN and vice-versa.
 * The script,poster data is stored in IPFS.
 * Director/filmaker raises funds with fixed amount of interest to be paid back to the contributors.
 * Each and every contributors is termed as producer(share holder to the film).
