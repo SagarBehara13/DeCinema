@@ -28,3 +28,10 @@ DeCinema stands for decentralized cinema, It’s an blockchain baised dapp that 
 5) yarn start
   
 ```
+### BSC Contract Address
+```
+Token:- 0xe8090864214C81d8550AAf6DD46ABfA76fce9504
+BnbSwap:- 0x72B5149Ce4A61f2a36Ee2f0BAbC79a19cF9c77E4
+
+* All the contracts are deployed on bsc testnet
+```
