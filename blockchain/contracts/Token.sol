@@ -1,8 +1,8 @@
 pragma solidity ^0.6.0;
 
-import './FilmFactory.sol';
+import './Cinema.sol';
 
-contract CinemaTestToken is FilmFactory {
+contract Token is FilmFactory {
     string  public name;
     string  public symbol;
     uint256 public totalSupply = 0;
