@@ -1,5 +1,5 @@
 <h1 align="center">DeCinema</h1>
-<h2 align="center">Decentralized Film production Dapp</h2>
+<h2 align="center">Decentralized Film production</h2>
 DeCinema stands for decentralized cinema, It’s an blockchain baised dapp that aids directors/filmmakers to raise funds for their movie and allows each and every individual to be a producer. 
 
 ### Basic Work Flow
