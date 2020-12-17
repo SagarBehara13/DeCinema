@@ -1,5 +1,6 @@
 import React, { Component } from "react"
 import ScrollContainer from "react-indiana-drag-scroll"
+import { Switch, Route, Redirect, BrowserRouter, withRouter } from 'react-router-dom'
 
 import "./Row.css"
 
@@ -15,9 +16,12 @@ class Row extends Component {
         <ScrollContainer className="row__posters">
           {this.props.data.map((filmDetail, index) => (
             < img
-              // onClick={() =>
-              //   movieClicked(movie.name || movie.title || movie.orginal_name)
-              // }
+              onClick={() => 
+                this.props.history.push({
+                  pathname: '/details',
+                  state: { film: filmDetail }
+                })
+              }
               key={index}
               className={`row__poster ${this.props.isLargeRow && "row__posterLarge"}`}
               src={`https://ipfs.infura.io/ipfs/${filmDetail.poster}`}
@@ -31,4 +35,4 @@ class Row extends Component {
 }
 
 
-export default Row
+export default withRouter(Row)

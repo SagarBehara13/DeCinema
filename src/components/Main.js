@@ -8,6 +8,7 @@ import SwapApp from './SwapApp'
 import Contribute from './Contribute'
 import AddRequest from './AddRequest'
 import EndAndRepay from './EndAndRepay'
+import Details from './Details'
 
 
 class Main extends React.Component {
@@ -24,6 +25,7 @@ class Main extends React.Component {
             <Route path="/request/contribute" component={Contribute} />
             <Route path="/request/end" component={EndAndRepay} />
             <Route path="/swap" component={SwapApp} />
+            <Route path="/details" component={Details} />
             <Redirect to="/home" />
           </Switch>
         </BrowserRouter>

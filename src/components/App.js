@@ -65,7 +65,7 @@ class App extends Component {
       this.setState({ loading: false })
 
     } else {
-      window.alert("Auction contract is not deployed to detected network")
+      window.alert("FilmFactory contract is not deployed to detected network")
     }
   }
 
@@ -79,7 +79,7 @@ class App extends Component {
       )
     }
 
-    const chunk = 1;
+    const chunk = 6;
     const chunkArrays = [];
 
     for (let i = 0; i < this.state.filmDetails.length; i += chunk) {
@@ -93,7 +93,7 @@ class App extends Component {
     return (
       <>
         {
-          chunkArrays.map(chunkArray => <Row title="Trending now" data={this.state.filmDetails} />)
+          chunkArrays.map(chunkArray => <Row title="Trending now" data={chunkArray} />)
         }
       </>
 

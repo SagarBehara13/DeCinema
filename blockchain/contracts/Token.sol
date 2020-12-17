@@ -1,14 +1,6 @@
 pragma solidity ^0.6.0;
 
-<<<<<<< HEAD
-contract Token {
-    string  public name = "DeCinema";
-    string  public symbol = "DCN";
-    uint256 public totalSupply = 1000000000000000000000000; // 1 million tokens
-    uint8   public decimals = 18;
-=======
 import './Cinema.sol';
->>>>>>> 3cda7bd90833953967259a35c335b087f934398c
 
 contract Token is FilmFactory {
     string  public name;
