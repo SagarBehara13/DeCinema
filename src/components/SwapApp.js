@@ -1,10 +1,11 @@
 import Web3 from 'web3'
 import React, { Component } from 'react'
+import { Spinner } from 'reactstrap'
 
-// import Token from '../abis/Token.json'
-// import EthSwap from '../abis/EthSwap.json'
 import './App.css'
 import Main from './SwapMain'
+import Token from '../abis/Token.json'
+import BnbSwap from '../abis/BnbSwap.json'
 
 
 class App extends Component {
@@ -35,13 +36,14 @@ class App extends Component {
       window.alert('Token contract not deployed to detected network.')
     }
 
-    // Load EthSwap
-    const ethSwapData = EthSwap.networks[networkId]
-    if (ethSwapData) {
-      const ethSwap = new web3.eth.Contract(EthSwap.abi, ethSwapData.address)
-      this.setState({ ethSwap })
+    // Load BnbSwap
+    const BnbSwapData = BnbSwap.networks[networkId]
+
+    if (BnbSwapData) {
+      const BnbSwap1 = new web3.eth.Contract(BnbSwap.abi, BnbSwapData.address)
+      this.setState({ BnbSwap: BnbSwap1 })
     } else {
-      window.alert('EthSwap contract not deployed to detected network.')
+      window.alert('BnbSwap contract not deployed to detected network.')
     }
 
     this.setState({ loading: false })
@@ -62,15 +64,15 @@ class App extends Component {
 
   buyTokens = (etherAmount) => {
     this.setState({ loading: true })
-    this.state.ethSwap.methods.buyTokens().send({ value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.BnbSwap.methods.buyTokens().send({ value: etherAmount, from: this.state.account }).on('transactionHash', (hash) => {
       this.setState({ loading: false })
     })
   }
 
   sellTokens = (tokenAmount) => {
     this.setState({ loading: true })
-    this.state.token.methods.approve(this.state.ethSwap.address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
-      this.state.ethSwap.methods.sellTokens(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+    this.state.token.methods.approve(this.state.BnbSwap.address, tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
+      this.state.BnbSwap.methods.sellTokens(tokenAmount).send({ from: this.state.account }).on('transactionHash', (hash) => {
         this.setState({ loading: false })
       })
     })
@@ -81,7 +83,7 @@ class App extends Component {
     this.state = {
       account: '',
       token: {},
-      ethSwap: {},
+      BnbSwap: {},
       ethBalance: '0',
       tokenBalance: '0',
       loading: true
@@ -91,7 +93,15 @@ class App extends Component {
   render() {
     let content
     if (this.state.loading) {
-      content = <p id="loader" className="text-center">Loading...</p>
+      content = (
+        <center style={{ padding: '100px' }}>
+          <Spinner animation="border" size="lg" role="status">
+            <span className="sr-only">
+              Loading! {this.state.loadingMessage}
+            </span>
+          </Spinner>
+        </center>
+      )
     } else {
       content = <Main
         ethBalance={this.state.ethBalance}
@@ -103,7 +113,6 @@ class App extends Component {
 
     return (
       <div>
-        <Navbar account={this.state.account} />
         <div className="container-fluid mt-5">
           <div className="row">
             <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '600px' }}>
@@ -114,9 +123,7 @@ class App extends Component {
                   rel="noopener noreferrer"
                 >
                 </a>
-
                 {content}
-
               </div>
             </main>
           </div>

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 
-import ethLogo from '../eth-logo.png'
-import tokenLogo from '../token-logo.png'
+import ethLogo from '../images/bnb-logo.png'
+import tokenLogo from '../images/logo.png'
 
 
 class SellForm extends Component {
@@ -43,7 +43,7 @@ class SellForm extends Component {
           <div className="input-group-append">
             <div className="input-group-text">
               <img src={tokenLogo} height='32' alt="" />
-              &nbsp; DApp
+              &nbsp; DCN
             </div>
           </div>
         </div>
@@ -64,13 +64,13 @@ class SellForm extends Component {
           <div className="input-group-append">
             <div className="input-group-text">
               <img src={ethLogo} height='32' alt="" />
-              &nbsp;&nbsp;&nbsp; ETH
+              &nbsp;&nbsp;&nbsp; BNB
             </div>
           </div>
         </div>
         <div className="mb-5">
           <span className="float-left text-muted">Exchange Rate</span>
-          <span className="float-right text-muted">100 DApp = 1 ETH</span>
+          <span className="float-right text-muted">100 DCN = 1 ETH</span>
         </div>
         <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
       </form>

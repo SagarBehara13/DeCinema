@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React from "react"
 
 import "./Nav.css"
 
@@ -15,7 +15,7 @@ function Nav(props) {
       <a href='/request/add' className="nav__button">Request funds</a>
       <a href='/request/end' className="nav__button">End and repay</a>
       <a href='/' className="nav__button">View requests for funds</a>
-      <a href='/' className="nav__button">Swap Tokens</a>
+      <a href='/swap' className="nav__button">Swap Tokens</a>
     </div>
   )
 }
