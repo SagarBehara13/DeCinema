@@ -12,3 +12,8 @@ DeCinema stands for decentralized cinema, It’s an blockchain baised dapp that 
 * After the total box earnings from the film, The filmmaker does returns the fund with fixed interest of amount set.
 * The repaid funds are then distributed amongst each shareHolder(contributors) with amount of interest earned on the basis of his/her amount
  of share.
+
+### Steps to test
+```
+* Connect Meta
+```
