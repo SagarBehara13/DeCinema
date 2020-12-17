@@ -1,9 +1,11 @@
 import Web3 from 'web3'
 import React, { Component } from "react"
+import { withRouter } from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input, Col, FormFeedback, Spinner } from 'reactstrap'
 
 import "./Nav.css"
 import "./AddRequest.css"
+import Token from '../abis/Token.json'
 
 
 class Contribute extends Component {
@@ -11,6 +13,8 @@ class Contribute extends Component {
     super(props)
 
     this.state = {
+      account: '',
+      film: '',
       loading: false,
       loadingMessage: '',
       filmId: '',
@@ -27,15 +31,12 @@ class Contribute extends Component {
     this.validate = this.validate.bind(this);
 
     this.loadWeb3 = this.loadWeb3.bind(this)
-    // this.createProduct = this.createProduct.bind(this)
-    // this.submitForm = this.submitForm.bind(this)
-    // this.uplaodFile = this.uploadFile.bind(this)
-    // this.onFileChange = this.onFileChange.bind(this)
+    this.loadBlockchainData = this.loadBlockchainData.bind(this)
   }
 
   async componentWillMount() {
-    // await this.loadWeb3()
-    // await this.loadBlockchainData()
+    await this.loadWeb3()
+    await this.loadBlockchainData()
   }
 
   async loadWeb3() {
@@ -51,36 +52,24 @@ class Contribute extends Component {
     }
   }
 
-  // async loadBlockchainData() {
-  //   const web3 = window.web3
-  //   const accounts = await web3.eth.getAccounts()
-  //   this.setState({ account: accounts[0] })
+  async loadBlockchainData() {
+    const web3 = window.web3
+    const accounts = await web3.eth.getAccounts()
+    this.setState({ account: accounts[0] })
 
-  //   const networkId = await web3.eth.net.getId()
-  //   const networkData = Auction.networks[networkId]
+    const networkId = await web3.eth.net.getId()
+    const networkData = Token.networks[networkId]
 
-  //   if (networkData) {
-  //     const auction = new web3.eth.Contract(Auction.abi, networkData.address)
-  //     this.setState({ auction })
+    if (networkData) {
+      const film = new web3.eth.Contract(Token.abi, networkData.address)
+      this.setState({ film })
 
-  //     const productCount = await auction.methods.productsCount().call()
+      this.setState({ loading: false })
 
-  //     this.setState({ productCount })
-
-  //     for (var i = 1; i <= productCount; i++) {
-  //       const product = await auction.methods.products(i).call()
-
-  //       this.setState({
-  //         products: [...this.state.products, product]
-  //       })
-  //     }
-
-  //     this.setState({ loading: false })
-
-  //   } else {
-  //     window.alert("Auction contract is not deployed to detected network")
-  //   }
-  // }
+    } else {
+      window.alert("Auction contract is not deployed to detected network")
+    }
+  }
 
   handleInputChange(event) {
     const target = event.target
@@ -103,6 +92,14 @@ class Contribute extends Component {
 
     this.setState({ loading: true, loadingMessage: 'Saving scripts and poster to IPFS' })
 
+    this.state.film.methods.contribute(this.state.filmId, this.state.amount)
+      .send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({ loading: false, loadingMessage: '' })
+
+        this.props.history.push('/home')
+      })
+
     this.setState({ loading: false, loadingMessage: '' })
   }
 
@@ -112,10 +109,10 @@ class Contribute extends Component {
       amount: '',
     }
 
-    if (this.state.touched.filmId && (filmId === null || filmId === undefined || filmId == '' || !filmId))
+    if (this.state.touched.filmId && (filmId === null || filmId === undefined || filmId === '' || !filmId))
       errors.filmId = 'FilmId should be greater than 0'
 
-    if (this.state.touched.amount && (amount === null || amount === undefined || amount == '' || !amount))
+    if (this.state.touched.amount && (amount === null || amount === undefined || amount === '' || !amount))
       errors.amount = 'Amount should be greater than 0'
 
     return errors
@@ -191,4 +188,4 @@ class Contribute extends Component {
 }
 
 
-export default Contribute
+export default withRouter(Contribute)

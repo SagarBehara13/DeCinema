@@ -1,6 +1,8 @@
 import Web3 from 'web3'
-import React, { Component } from 'react'
 import { Spinner } from 'reactstrap'
+import React, { Component } from 'react'
+import { withRouter } from 'react-router-dom';
+
 
 import './App.css'
 import Main from './SwapMain'
@@ -134,4 +136,4 @@ class App extends Component {
 }
 
 
-export default App
+export default withRouter(App)

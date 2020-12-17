@@ -1,13 +1,16 @@
 import Web3 from 'web3'
 import React, { Component } from "react"
+import { withRouter } from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input, Col, FormFeedback, Spinner } from 'reactstrap'
 
 import "./Nav.css"
 import "./AddRequest.css"
-
+import Token from '../abis/Token.json'
 
 const ifsClient = require('ipfs-http-client')
-const ipfs = ifsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'http' })
+
+
+const ipfs = ifsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'https' })
 
 
 class AddRequest extends Component {
@@ -15,7 +18,9 @@ class AddRequest extends Component {
     super(props)
 
     this.state = {
-      loading: false,
+      account: '',
+      film: '',
+      loading: true,
       loadingMessage: '',
       filmname: '',
       directorname: '',
@@ -47,15 +52,12 @@ class AddRequest extends Component {
     this.validate = this.validate.bind(this);
 
     this.loadWeb3 = this.loadWeb3.bind(this)
-    // this.createProduct = this.createProduct.bind(this)
-    // this.submitForm = this.submitForm.bind(this)
-    // this.uplaodFile = this.uploadFile.bind(this)
-    // this.onFileChange = this.onFileChange.bind(this)
+    this.loadBlockchainData = this.loadBlockchainData.bind(this)
   }
 
   async componentWillMount() {
-    // await this.loadWeb3()
-    // await this.loadBlockchainData()
+    await this.loadWeb3()
+    await this.loadBlockchainData()
   }
 
   async loadWeb3() {
@@ -71,36 +73,24 @@ class AddRequest extends Component {
     }
   }
 
-  // async loadBlockchainData() {
-  //   const web3 = window.web3
-  //   const accounts = await web3.eth.getAccounts()
-  //   this.setState({ account: accounts[0] })
+  async loadBlockchainData() {
+    const web3 = window.web3
+    const accounts = await web3.eth.getAccounts()
+    this.setState({ account: accounts[0] })
 
-  //   const networkId = await web3.eth.net.getId()
-  //   const networkData = Auction.networks[networkId]
+    const networkId = await web3.eth.net.getId()
+    const networkData = Token.networks[networkId]
 
-  //   if (networkData) {
-  //     const auction = new web3.eth.Contract(Auction.abi, networkData.address)
-  //     this.setState({ auction })
+    if (networkData) {
+      const film = new web3.eth.Contract(Token.abi, networkData.address)
+      this.setState({ film })
 
-  //     const productCount = await auction.methods.productsCount().call()
+      this.setState({ loading: false })
 
-  //     this.setState({ productCount })
-
-  //     for (var i = 1; i <= productCount; i++) {
-  //       const product = await auction.methods.products(i).call()
-
-  //       this.setState({
-  //         products: [...this.state.products, product]
-  //       })
-  //     }
-
-  //     this.setState({ loading: false })
-
-  //   } else {
-  //     window.alert("Auction contract is not deployed to detected network")
-  //   }
-  // }
+    } else {
+      window.alert("Auction contract is not deployed to detected network")
+    }
+  }
 
   handleInputChange(event) {
     const target = event.target
@@ -141,9 +131,21 @@ class AddRequest extends Component {
     const posterIpfs = await ipfs.add(this.state.posterBuffer)
     const scriptIpfs = await ipfs.add(this.state.scriptBuffer)
 
-    console.log(posterIpfs, scriptIpfs)
+    this.state.film.methods.createFilm(
+      this.state.filmname.trim(),
+      Number(this.state.budget),
+      this.state.directorname.trim(),
+      posterIpfs,
+      scriptIpfs,
+      this.state.description,
+      Number(this.state.interestrate),
+      this.state.category
+    ).send({ from: this.state.account })
+      .once('receipt', (receipt) => {
+        this.setState({ loading: false, loadingMessage: '' })
 
-    this.setState({ loading: false, loadingMessage: '' })
+        this.props.history.push('/home')
+      })
   }
 
   validate(filmname, directorname, interestrate, budget, category, poster, script, description) {
@@ -333,4 +335,4 @@ class AddRequest extends Component {
 }
 
 
-export default AddRequest
+export default withRouter(AddRequest)
