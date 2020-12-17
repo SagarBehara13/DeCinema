@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
-import tokenLogo from '../token-logo.png'
-import ethLogo from '../eth-logo.png'
+
+import ethLogo from '../images/bnb-logo.png'
+import tokenLogo from '../images/logo.png'
+
 
 class BuyForm extends Component {
   constructor(props) {
@@ -13,12 +15,13 @@ class BuyForm extends Component {
   render() {
     return (
       <form className="mb-3" onSubmit={(event) => {
-          event.preventDefault()
-          let etherAmount
-          etherAmount = this.input.value.toString()
-          etherAmount = window.web3.utils.toWei(etherAmount, 'Ether')
-          this.props.buyTokens(etherAmount)
-        }}>
+        event.preventDefault()
+
+        let etherAmount
+        etherAmount = this.input.value.toString()
+        etherAmount = window.web3.utils.toWei(etherAmount, 'Ether')
+        this.props.buyTokens(etherAmount)
+      }}>
         <div>
           <label className="float-left"><b>Input</b></label>
           <span className="float-right text-muted">
@@ -40,8 +43,8 @@ class BuyForm extends Component {
             required />
           <div className="input-group-append">
             <div className="input-group-text">
-              <img src={ethLogo} height='32' alt=""/>
-              &nbsp;&nbsp;&nbsp; ETH
+              <img src={ethLogo} height='32' alt="" />
+              &nbsp;&nbsp;&nbsp; BNB
             </div>
           </div>
         </div>
@@ -61,19 +64,20 @@ class BuyForm extends Component {
           />
           <div className="input-group-append">
             <div className="input-group-text">
-              <img src={tokenLogo} height='32' alt=""/>
-              &nbsp; DApp
+              <img src={tokenLogo} height='32' alt="" />
+              &nbsp; DCN
             </div>
           </div>
         </div>
         <div className="mb-5">
           <span className="float-left text-muted">Exchange Rate</span>
-          <span className="float-right text-muted">1 ETH = 100 DApp</span>
+          <span className="float-right text-muted">1 BNB = 100 DCN</span>
         </div>
         <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP!</button>
       </form>
     );
   }
 }
+
 
 export default BuyForm;

@@ -27,6 +27,8 @@ contract BnbSwap {
 
   function buyTokens() public payable {
     uint tokenAmount = msg.value * rate;
+
+    // Require that BnbSwap has enough tokens
     require(token.balanceOf(address(this)) >= tokenAmount);
     token.transfer(msg.sender, tokenAmount);
 
@@ -35,10 +37,16 @@ contract BnbSwap {
 
   function sellTokens(uint _amount) public {
     require(token.balanceOf(msg.sender) >= _amount);
-    uint etherAmount = _amount / rate;
-    require(address(this).balance >= etherAmount);
+
+    // Calculate the amount of Bnber to redeem
+    uint BnberAmount = _amount / rate;
+
+    // Require that BnbSwap has enough Bnber
+    require(address(this).balance >= BnberAmount);
+
+    // Perform sale
     token.transferFrom(msg.sender, address(this), _amount);
-    msg.sender.transfer(etherAmount);
+    msg.sender.transfer(BnberAmount);
 
     emit TokensSold(msg.sender, address(token), _amount, rate);
   }

@@ -1,0 +1,20 @@
+.addform-container {
+  margin-top: 3vh;
+  margin-left: 0;
+  padding: 1rem;
+  padding-left: 0;
+}
+
+.row {
+  margin-top: 7vh;
+  margin-left: 20px;
+  color: white;
+  overflow-x: hidden;
+}
+
+.input,
+.input:active,
+.input:focus {
+  background-color: transparent;
+  color: white;
+}
