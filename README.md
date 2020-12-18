@@ -58,7 +58,14 @@ BnbSwap:- 0x40A1f6eE4EA34A99916bd7036Cd28a32D7B60b0C
 
 * All the contracts are deployed on bsc testnet
 ```
-
+### Resources Utilized
+```
+* Metamask
+* Truffle
+* Binance Smart Chain
+* Web3
+* IPFS
+```
 ### Remarks
 ```
 We have used boilerplate from dapp university and modified as per our need.
