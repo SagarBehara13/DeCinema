@@ -40,6 +40,7 @@ These video does showcase the overall working of the project step by step.
 
 ### Daap's Glimpse
 <h2 align="center"> Example Interface </h2>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/home-page-final.gif"><br></br>
 <img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.03.50%20AM.png"><br></br>
 
 <h2 align="center"> Film's fund raising form </h2>
@@ -50,6 +51,10 @@ These video does showcase the overall working of the project step by step.
 
 <h2 align="center"> Retriving the data stored on blockchain and ipfs </h2>
 <img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.05.29%20AM.png"><br></br>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screenshot%20from%202020-12-18%2012-41-11.png"><br></br>
+
+<h2 align="center"> Contribution To Filmmaker </h2>
+<img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%2012.56.35%20PM.png"><br></br>
 
 ### BSC Contract Address
 ```
