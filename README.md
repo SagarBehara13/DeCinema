@@ -46,7 +46,7 @@ These video does showcase the overall working of the project step by step.
 <h2 align="center"> Film's fund raising form </h2>
 <img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.04.05%20AM.png"><br></br>
 
-<h2 align="center"> Swap BNB to DCN </h2>
+<h2 align="center"> Swap BNB to DCN and vice-versa </h2>
 <img src="https://github.com/SagarBehara13/DeCinema/blob/master/src/images/Screen%20Shot%202020-12-18%20at%203.04.48%20AM.png"><br></br>
 
 <h2 align="center"> Retriving the data stored on blockchain and ipfs </h2>
