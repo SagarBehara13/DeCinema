@@ -30,10 +30,6 @@ class EndAndRepay extends Component {
 
     this.loadWeb3 = this.loadWeb3.bind(this)
     this.loadBlockchainData = this.loadBlockchainData.bind(this)
-    // this.createProduct = this.createProduct.bind(this)
-    // this.submitForm = this.submitForm.bind(this)
-    // this.uplaodFile = this.uploadFile.bind(this)
-    // this.onFileChange = this.onFileChange.bind(this)
   }
 
   async componentWillMount() {

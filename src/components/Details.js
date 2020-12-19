@@ -1,39 +1,27 @@
-import Web3 from 'web3'
-import { Spinner, Table } from 'reactstrap'
+import { Table } from 'reactstrap'
 import React, { Component } from "react"
 import { withRouter, Redirect } from 'react-router-dom'
 
 import "./App.css"
 import "./details.css"
-import Row from "./Row"
-import Token from "../abis/Token.json"
 
 
 class Details extends Component {
-  constructor(props) {
-    super(props)
-
-    // this.state = {
-    //   film: null,
-    //   loading: true,
-    //   account: '',
-    //   filmDetails: []
-    // }
-  }
 
   render() {
     const data = this.props.location && this.props.location.state && this.props.location.state.film || null;
+
     if (data === null) {
-        return <Redirect
-            to={{
-                pathname: "/home",
-                state: {}
-            }}
-        />
+      return <Redirect
+        to={{
+          pathname: "/home",
+          state: {}
+        }}
+      />
     }
     console.log('test details', data);
     return (
-    <Table className="Table" dark>
+      <Table className="Table" dark>
         <h2>Film Details</h2>
         <br />
         <br />
@@ -71,7 +59,7 @@ class Details extends Component {
           <tr>
             <th scope="row">7</th>
             <td>Paid Back?</td>
-            <td>{data.payedBack? "Yes": "No"}</td>
+            <td>{data.payedBack ? "Yes" : "No"}</td>
           </tr>
           <tr>
             <th scope="row">8</th>

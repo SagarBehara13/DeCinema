@@ -3,6 +3,7 @@ import logo from '../logo.png';
 import './App.css';
 
 const ifsClient = require('ipfs-http-client')
+
 //const ipfs = ifsClient('ipfs.infura.io', 5001, {protocol: 'https'})
 const ipfs = ifsClient({ host: 'ipfs.infura.io', port: '5001', protocol: 'http' })
 const Web3 = require("web3");

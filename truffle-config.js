@@ -1,9 +1,12 @@
 require('babel-register')
 require('babel-polyfill')
+
 require('dotenv').config()
+
 
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 const privateKey = process.env.PRIVATE_KEY
+
 
 module.exports = {
   networks: {
@@ -13,7 +16,7 @@ module.exports = {
       network_id: "*" // Match any network id
     },
     binance: {
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(
           [privateKey],
           'https://data-seed-prebsc-1-s1.binance.org:8545'

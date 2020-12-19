@@ -1,6 +1,6 @@
 import React, { Component } from "react"
+import { withRouter } from 'react-router-dom'
 import ScrollContainer from "react-indiana-drag-scroll"
-import { Switch, Route, Redirect, BrowserRouter, withRouter } from 'react-router-dom'
 
 import "./Row.css"
 
@@ -16,7 +16,7 @@ class Row extends Component {
         <ScrollContainer className="row__posters">
           {this.props.data.map((filmDetail, index) => (
             < img
-              onClick={() => 
+              onClick={() =>
                 this.props.history.push({
                   pathname: '/details',
                   state: { film: filmDetail }
