@@ -1,6 +1,8 @@
 pragma solidity >=0.6.0 <0.7.0;
 
+
 import "./Token.sol";
+
 
 contract BnbSwap {
   string public name = "BnbSwap Instant Exchange";
@@ -30,6 +32,7 @@ contract BnbSwap {
 
     // Require that BnbSwap has enough tokens
     require(token.balanceOf(address(this)) >= tokenAmount);
+
     token.transfer(msg.sender, tokenAmount);
 
     emit TokensPurchased(msg.sender, address(token), tokenAmount, rate);
@@ -50,5 +53,4 @@ contract BnbSwap {
 
     emit TokensSold(msg.sender, address(token), _amount, rate);
   }
-
 }
