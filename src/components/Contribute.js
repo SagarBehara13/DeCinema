@@ -92,7 +92,7 @@ class Contribute extends Component {
 
     this.setState({ loading: true, loadingMessage: 'Saving scripts and poster to IPFS' })
 
-    this.state.film.methods.contribute(this.state.filmId, this.state.amount)
+    this.state.film.methods.contribute(this.state.filmId, window.web3.utils.toWei(this.state.amount, 'ether'))
       .send({ from: this.state.account })
       .once('receipt', (receipt) => {
         this.setState({ loading: false, loadingMessage: '' })
